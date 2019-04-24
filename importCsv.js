@@ -2,24 +2,25 @@ const fs = require('fs')
 const readline = require('readline');
 
 module.exports = async  () => {
-  const fileStream = fs.createReadStream('./file.csv');
+  const fileStream = fs.createReadStream('./file02.csv');
 
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity
   });
   let json = {}
+  const first = 0, second = 1, third = 2
   rl.on('line', (line) => {
       let obj = line.split(',')
-      if(obj[2] === '301' || obj[2] === '302'){
-        if(json[`${obj[1].replace('www.intelbras.com.br', '')}`]){
-          console.log(`${obj[1].replace('www.intelbras.com.br', '')}`)
-          console.log(json[`${obj[1].replace('www.intelbras.com.br', '')}`])
+      if(obj[second].trim() === '301' || obj[second].trim() === '302'){
+        if(json[`${obj[first].replace('www.intelbras.com.br', '')}`]){
+          console.log(`${obj[first].replace('www.intelbras.com.br', '')}`)
+          console.log(json[`${obj[first].replace('www.intelbras.com.br', '')}`])
           console.log('----------------')
         }
-        json[`${obj[1].replace('www.intelbras.com.br', '')}`] = {
-          path: obj[3],
-          status: obj[2]
+        json[`${obj[first].replace('www.intelbras.com.br', '')}`] = {
+          path: obj[third].replace('https://www.intelbras.com', ''),
+          status: obj[second]
         }
       }
   }).on('close', () => {
